@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ooScriptMaster">
+    <output-path>$PROJECT_DIR$/out/artifacts/ooScriptMaster</output-path>
+    <root id="archive" name="ooScriptMaster.jar">
+      <element id="module-output" name="ooScriptMaster" />
+    </root>
+  </artifact>
+</component>
