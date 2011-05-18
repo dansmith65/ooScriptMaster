@@ -43,7 +43,9 @@ public class Functions {
 		} catch (GeneralException ge) {
 			throw ge
 		} catch (e) {
-			ErrorCodes.setLastError(-1, e)
+			if (ErrorCodes.lastErrorNumber == 0) {
+				ErrorCodes.setLastError(-1, e)
+			}
 			throw (e)
 		}
 	}
