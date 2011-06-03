@@ -26,6 +26,7 @@ public class ErrorCodes {
 			2.05: "Invalid parameter: must be a directory",
 			2.06: "Invalid parameter: option",
 			3: "Operation not supported",
+			4: "Invalid state",
 			// 100 file/folder operations
 			100: "File does not exist",
 			101: "Directory does not exist",
