@@ -121,12 +121,16 @@ public class Functions {
 		// verify it is a valid option
 		// convert it to same object type as that from validOption - or throw an error trying
 		options.each() { key, value ->
+			key = key.toString().toLowerCase()
 			if (validOptions.containsKey(key)) {
 				// replace default option with user-provided option
 				// attempt to convert type based on class of value in validOptions
 				try {
 					if (validOptions[key] in Boolean) {
 						returnVal[key] = value.toString().toBoolean()
+					} else if (validOptions[key] == null) {
+						// don't perform any conversion of validOption's value is null
+						returnVal[key] = value
 					} else {
 						returnVal[key] = value.asType(validOptions[key].getClass())
 					}
