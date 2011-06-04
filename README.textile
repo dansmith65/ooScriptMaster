@@ -1,0 +1,16 @@
+h1. WHAT
+
+'ooScriptMaster' stands for object oriented ScriptMaster. "ScriptMaster":http://360works.com/scriptmaster/ is a plugin for "FileMaker":http://www.filemaker.com/ which allows you to write your own plugin in java/groovy.
+
+h1. WHY
+
+Plugin functions in ScriptMaster are completly separate from one another; if you write five different functions that all need to create a directory; you need a copy of code that creates a directory in each function. Because of this separation, it is also difficult to save a value in one function and retrieve it in another. ooScriptMaster resolves both of these problems.
+
+h1. HOW
+
+ooScriptMaster uses classes with static fields and methods. Every function declared in ScriptMaster.fp7 calls a static method in one of ooScriptMaster's classes where all the work is done.
+
+h1. STATUS
+
+This project is currently in pre-release state. When a beta release is available, I will post a download which will include ScriptMaster.fp7 containing ooScriptMaster.jar and with all the functions/parameters defined.
+If you would like to get started with the project now, you will need to compile the code as a .jar file and refer to the documentation in the code to see what methods are available.
