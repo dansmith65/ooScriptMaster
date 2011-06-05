@@ -263,7 +263,8 @@ public class FileOperations extends Functions {
 		if (file.isDirectory()) return success(false) as Boolean
 
 		// last character in path is a file separator
-		if (path.endsWith('\\') || path.endsWith('/')) return success(false) as Boolean
+		//if (path.endsWith('\\') || path.endsWith('/')) return success(false) as Boolean
+        if (path.endsWith(SEP)) return success(false) as Boolean
 
 		// last segment of path contains a period
 		if (file.getName().contains('.') || path.endsWith('.')) return success()
@@ -287,7 +288,8 @@ public class FileOperations extends Functions {
 		if (file.isDirectory()) return success()
 
 		// last character in path is a file separator
-		if (path.endsWith('\\') || path.endsWith('/')) return success()
+		//if (path.endsWith('\\') || path.endsWith('/')) return success()
+        if (path.endsWith(SEP)) return success()
 
 		// last segment of path does not contain a period
 		if (!file.getName().contains('.') && !path.endsWith('.')) return success()

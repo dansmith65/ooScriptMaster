@@ -5,15 +5,29 @@ package ooscriptmaster
  */
 public class Functions {
 	/**
+	 * Version info
+	 */
+	public static final String VER = '1.06.05'
+
+    /**
 	 * End of line marker for current operating system.
 	 */
-
 	public static final String EOL = System.getProperty("line.separator")
 
 	/**
 	 * File separator for current operating system
 	 */
 	public static final String SEP = System.getProperty("file.separator")
+
+    /**
+	 * User home directory
+	 */
+	public static final String HOME = System.getProperty("user.home")
+
+	 /**
+	 * User home directory
+	 */
+	public static final String USER = System.getProperty("user.name")
 
 	/**
 	 * True if the current operating system is Macintosh
@@ -27,11 +41,12 @@ public class Functions {
 	public static final Boolean ISWIN =
 	System.getProperty("os.name").toLowerCase().contains("windows")
 
-    /**
-	 * True if the current Java version is above 1.6
+	/**
+	 * True if the current Java version is 1.6 or above
 	 */
 	public static final Boolean JVER =
-    System.getProperty("java.version").substring(0, 2) == '1.' && System.getProperty("java.version").substring(3, 1).toInteger() > 5
+    System.getProperty("java.version").substring(0, 2) == '1.' && System.getProperty("java.version").substring(2, 3).toInteger() > 5
+
 
 	/**
 	 * Used to call a method from ScriptMaster. If a method is called directly,
@@ -49,9 +64,7 @@ public class Functions {
 		} catch (GeneralException ge) {
 			throw ge
 		} catch (e) {
-			if (ErrorCodes.lastErrorNumber == 0) {
-				ErrorCodes.setLastError(-1, e)
-			}
+			ErrorCodes.setLastError(-1, e)
 			throw (e)
 		}
 	}
@@ -127,16 +140,12 @@ public class Functions {
 		// verify it is a valid option
 		// convert it to same object type as that from validOption - or throw an error trying
 		options.each() { key, value ->
-			key = key.toString().toLowerCase()
 			if (validOptions.containsKey(key)) {
 				// replace default option with user-provided option
 				// attempt to convert type based on class of value in validOptions
 				try {
 					if (validOptions[key] in Boolean) {
 						returnVal[key] = value.toString().toBoolean()
-					} else if (validOptions[key] == null) {
-						// don't perform any conversion of validOption's value is null
-						returnVal[key] = value
 					} else {
 						returnVal[key] = value.asType(validOptions[key].getClass())
 					}
