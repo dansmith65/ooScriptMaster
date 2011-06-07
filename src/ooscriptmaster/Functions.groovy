@@ -7,7 +7,7 @@ public class Functions {
 	/**
 	 * Version info
 	 */
-	public static final String VER = '1.06.05'
+	public static final String VER = '1.06.06'
 
     /**
 	 * End of line marker for current operating system.
