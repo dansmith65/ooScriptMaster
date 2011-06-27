@@ -35,11 +35,16 @@ public class ErrorCodes {
 			104: "Cannot write to file",
 			105: "Cannot delete file",
 			106: "Cannot read file",
+			120: "File is OPEN",
 			// 200 specific to particular function
 			200: "TimerStart must be called first",
 			// 300 FileMaker calculation engine related
 			300: "Container field is empty",
 			300.01: "Could not get data from container (make sure container field name is passed as text)",
+			// 400 Password or security related
+			400: "Password error",
+			401: "Encrypted file: incorrect password",
+			402: "No password supplied",
 
 			// 1000-1999 are reserved for ScriptMaster errors
 			1000: "SQL Error",
