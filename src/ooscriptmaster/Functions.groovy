@@ -16,6 +16,16 @@ public class Functions {
 	public static final String SEP = System.getProperty("file.separator")
 
 	/**
+	 * User home directory
+	 */
+	public static final String HOME = System.getProperty("user.home")
+
+	/**
+	 * User name
+	 */
+	public static final String USER = System.getProperty("user.name")
+
+	/**
 	 * True if the current operating system is Macintosh
 	 */
 	public static final Boolean ISMAC =
@@ -31,7 +41,7 @@ public class Functions {
 	 * True if the current Java version is above 1.6
 	 */
 	public static final Boolean JVER =
-	System.getProperty("java.version").substring(0, 2) == '1.' && System.getProperty("java.version").substring(3, 1).toInteger() > 5
+	System.getProperty("java.version").substring(0, 2) == '1.' && System.getProperty("java.version").substring(2, 3).toInteger() > 5
 
 	/**
 	 * Used to call a method from ScriptMaster. If a method is called directly,
