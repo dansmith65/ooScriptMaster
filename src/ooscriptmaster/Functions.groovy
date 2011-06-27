@@ -28,6 +28,12 @@ public class Functions {
 	System.getProperty("os.name").toLowerCase().contains("windows")
 
 	/**
+	 * True if the current Java version is above 1.6
+	 */
+	public static final Boolean JVER =
+	System.getProperty("java.version").substring(0, 2) == '1.' && System.getProperty("java.version").substring(3, 1).toInteger() > 5
+
+	/**
 	 * Used to call a method from ScriptMaster. If a method is called directly,
 	 * the lastError info will not be set if an Exception is not caught by the method.
 	 *
