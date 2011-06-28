@@ -5,9 +5,14 @@ package ooscriptmaster
  */
 public class Functions {
 	/**
+	 * Current package version (ie. version of the ooScriptMaster.jar file)
+	 * This version number will match the git tag in the master branch.
+	 */
+	public static final String VERSION = '1.0000'
+
+	/**
 	 * End of line marker for current operating system.
 	 */
-
 	public static final String EOL = System.getProperty("line.separator")
 
 	/**
