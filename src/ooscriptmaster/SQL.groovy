@@ -154,4 +154,37 @@ public class SQL extends Functions {
 		success(result)
 	}
 
+	/**
+	 * Format field name to work in an SQL statement.
+	 *
+	 * @param field name, with or without the tablename:: preceding it
+	 * @return
+	 */
+	public static def sqlField(field) {
+		paramRequired(field)
+		field = field as String
+		String table = ''
+
+		// separate table and field, if table exists
+		if (field.contains('::')) {
+			def tokens = field.tokenize('::')
+			if (tokens.size() > 2) {
+				throw new ValidationException(2, 'field contained more than one ::')
+			}
+			// quote table
+			table = '"' + tokens[0] + '"'
+			// set field
+			field = tokens[1]
+		}
+
+		// quote field
+		field = '"' + field + '"'
+
+		if (table != '') {
+			return success(table + '.' + field)
+		} else {
+			return success(field)
+		}
+	}
+
 }
