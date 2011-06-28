@@ -50,4 +50,31 @@ public class SQLTest {
 		assertEquals(expected, result)
 	}
 
+	//sqlTable
+	@Test(expected = ValidationException.class)
+	public void sqlTable_empty_ValidationException() {
+		String table = ''
+		SQL.sqlTable(table)
+	}
+
+	@Test(expected = ValidationException.class)
+	public void sqlTable_invalid_ValidationException() {
+		String table = 'a::b::c'
+		SQL.sqlTable(table)
+	}
+
+	@Test public void sqlTable_tableNameOnly_matchString() {
+		String table = 'tableName'
+		String expected = '"tableName"'
+		def result = SQL.sqlTable(table)
+		assertEquals(expected, result)
+	}
+
+	@Test public void sqlTable_tableAndTableName_matchString() {
+		String table = 'table Name::field Name'
+		String expected = '"table Name"'
+		def result = SQL.sqlTable(table)
+		assertEquals(expected, result)
+	}
+
 }

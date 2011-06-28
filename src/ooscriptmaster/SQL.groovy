@@ -156,6 +156,7 @@ public class SQL extends Functions {
 
 	/**
 	 * Format field name to work in an SQL statement.
+	 * Designed to accept input from GetFieldName() from FileMaker.
 	 *
 	 * @param field name, with or without the tablename:: preceding it
 	 * @return
@@ -185,6 +186,32 @@ public class SQL extends Functions {
 		} else {
 			return success(field)
 		}
+	}
+
+	/**
+	 * Format table name to work in an SQL statement.
+	 * Designed to accept input from GetFieldName() from FileMaker.
+	 *
+	 * @param table name, with or without a ::fieldName following it
+	 * @return
+	 */
+	public static def sqlTable(table) {
+		paramRequired(table)
+		table = table as String
+
+		// separate table and field, if table exists
+		if (table.contains('::')) {
+			def tokens = table.tokenize('::')
+			if (tokens.size() > 2) {
+				throw new ValidationException(2, 'table contained more than one ::')
+			}
+			table = tokens[0]
+		}
+
+		// quote
+		table = '"' + table + '"'
+
+		return success(table)
 	}
 
 }
