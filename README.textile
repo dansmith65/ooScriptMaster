@@ -14,6 +14,6 @@ h1. STATUS
 
 All functions have been tested on Windows and most functions have been tested on Mac. There are no known issues.
 
-In the "Download":https://github.com/dansmith65/ooScriptMaster/downloads section you can download a copy of a ScriptMaster.fp7 file containing ooScriptMaster.jar and all the functions/parameters of this project defined.
+In the "Downloads":https://github.com/dansmith65/ooScriptMaster/downloads section you can download a copy of a ScriptMaster.fp7 file containing ooScriptMaster.jar and all the functions/parameters of this project defined.
 
-Groovydoc's are avilable "here":http://dansmith65.github.com/ooScriptMaster/groovydoc/.
+Groovydoc for ooScriptMaster.jar are avilable "here":http://dansmith65.github.com/ooScriptMaster/groovydoc/.
