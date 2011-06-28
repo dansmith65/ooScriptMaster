@@ -17,7 +17,7 @@ public class SQL extends Functions {
 	 * @param statement SQL to execute
 	 * @param columnDelimiter character to use between field (column) values
 	 * @param rowDelimiter character to use between records(rows)
-	 * @return an abstract number, representing the current time
+	 * @return result of SQL statement
 	 */
 	public static def sql(fmpro, statement, columnDelimiter, rowDelimiter) {
 		paramRequired(fmpro)
