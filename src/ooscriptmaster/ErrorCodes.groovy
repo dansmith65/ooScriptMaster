@@ -171,7 +171,7 @@ public class ErrorCodes {
 	 *
 	 * @param filePath for output CSV file
 	 */
-	public static String getAllToCSV(String filePath) {
+	public static boolean getAllToCSV(String filePath) {
 		Functions.paramRequired(filePath)
 
 		// add csv file extension, if it doesn't exist

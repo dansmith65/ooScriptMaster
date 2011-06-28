@@ -55,7 +55,7 @@ public class SQL extends Functions {
 	 * @param statement SQL to execute
 	 * @return true on success, otherwise throw Exception
 	 */
-	public static def sqlArray(fmpro, statement) {
+	public static boolean sqlArray(fmpro, statement) {
 		paramRequired(fmpro)
 		paramRequired(statement)
 
@@ -76,9 +76,9 @@ public class SQL extends Functions {
 	 *
 	 * @return # of rows
 	 */
-	public static def sqlArrayCountRows() {
+	public static int sqlArrayCountRows() {
 		if (this.sqlArray == null) { throw new ValidationException(1000.01) }
-		success(this.sqlArray.size())
+		success(this.sqlArray.size()) as int
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class SQL extends Functions {
 	 *
 	 * @return # of columns
 	 */
-	public static def sqlArrayCountColumns() {
+	public static int sqlArrayCountColumns() {
 		if (this.sqlArray == null) { throw new ValidationException(1000.01) }
 
 		def result
@@ -100,7 +100,7 @@ public class SQL extends Functions {
 				throw (e)
 			}
 		}
-		success(result)
+		success(result) as int
 	}
 
 	/**
