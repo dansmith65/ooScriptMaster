@@ -159,7 +159,7 @@ public class SQL extends Functions {
 	 * Designed to accept input from GetFieldName() from FileMaker.
 	 *
 	 * @param field name, with or without the tablename:: preceding it
-	 * @return
+	 * @return field name escaped for use in SQL statement
 	 */
 	public static def sqlField(field) {
 		paramRequired(field)
@@ -193,7 +193,7 @@ public class SQL extends Functions {
 	 * Designed to accept input from GetFieldName() from FileMaker.
 	 *
 	 * @param table name, with or without a ::fieldName following it
-	 * @return
+	 * @return table name escaped for use in SQL statement
 	 */
 	public static def sqlTable(table) {
 		paramRequired(table)
