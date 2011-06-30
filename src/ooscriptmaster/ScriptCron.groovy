@@ -1,24 +1,26 @@
 package ooscriptmaster
 
+import it.sauronsoftware.cron4j.Predictor
+import it.sauronsoftware.cron4j.Scheduler
+import it.sauronsoftware.cron4j.SchedulingPattern
 import java.text.DateFormat
-import it.sauronsoftware.cron4j.*
 
 /**
  * UNIX cron-like script scheduler.
  */
 public class ScriptCron extends Functions {
 	/**
-	 * cron4j cron object.
+	 * cron4j object.
 	 */
 	public static Scheduler cron = new Scheduler()
 
 	/**
-	 * Holds map of Name:ScriptCronTask object.
+	 * Holds map of Name:ScriptCronTask objects.
 	 */
 	public static Map tasks = [:]
 
 	/**
-	 * Thread priority for cron, valid range is likely from 1-10, but the current envirenment is
+	 * Thread priority for cron, valid range is likely from 1-10, but the current environment is
 	 * tested to determine the actual valid range. Default value is 9. Other threads in this
 	 * plug-in run at level 6. A lower level can cause a delay in the execution of the
 	 * script. In my tests on Windows Vista, a level of 6 caused up to 10 min. delay,
@@ -51,8 +53,8 @@ public class ScriptCron extends Functions {
 	 * Throw exception if value cannot be converted to an Integer, or is not in the valid range.
 	 * The valid range is determined by the current threads valid priority range.
 	 *
-	 * @param value
-	 * @param allowNull if true, will not throw Exception if value is null
+	 * @param value to validate
+	 * @param allowNull boolean. If true, will not throw Exception if value is null, default = false
 	 * @return value as Integer
 	 */
 	public static Integer validatePriority(value, Boolean allowNull = false) {
@@ -84,7 +86,8 @@ public class ScriptCron extends Functions {
 	 * Exception if task does not exist in tasks property.
 	 *
 	 * @param name of task
-	 * @param required , if true will throw Exception if task does not exist (default is false)
+	 * @param required boolean. If true will throw Exception if task does not exist (default is
+	 * false).
 	 * @return true if task exists, otherwise false
 	 */
 	public static Boolean taskExists(String name, Boolean required = false) {
@@ -111,14 +114,17 @@ public class ScriptCron extends Functions {
 	 * @param script name to run
 	 * @param parameter to send to script
 	 * @param schedule (UNIX crontab-like pattern)
-	 * @param options
-	 *              file        name of file to perform script in (defaults to current file)
-	 *              name        name of schedule (defaults to file name::script)
-	 *                          if the name already exists, it will be replaced
-	 *              priority    priority for this task. same as {@link this.priority},
-	 *                          except it only applies to this task.
-	 *              autostart   (default=true) if true, will automatically start the cron
-	 *                          scheduler after adding this task
+	 *      <a href="http://www.sauronsoftware.it/projects/cron4j/manual.php#p02">cron4j manual</a>
+	 * @param options configure how this method will operate
+	 * <ul>
+	 *      <li><code>file</code> = file name to perform script in (default = current file)
+	 *      <li><code>name</code> = name of schedule. If the name already exists, it will be
+	 *          replaced. (default = fileName::script)
+	 *      <li><code>priority</code> = thread priority for this task. same as {@link #priority},
+	 *          except it only applies to this task. (default = current value of {@link #priority})
+	 *      <li><code>autostart</code> = boolean. If true, will automatically start the cron
+	 *          scheduler after adding this task (default = true)
+	 * </ul>
 	 * @return name of task created
 	 */
 	public static String add(fmpro, script, parameter, schedule, options) {
@@ -159,7 +165,7 @@ public class ScriptCron extends Functions {
 	//TODO add edit method
 
 	/**
-	 * Set the priority property and the cron priority if the cron is started.
+	 * Set the priority property and the cron priority if cron is started.
 	 *
 	 * @param priority
 	 * @return
@@ -173,8 +179,8 @@ public class ScriptCron extends Functions {
 	}
 
 	/**
-	 * Start cron if it is not already started, then set it's priority from the value of
-	 * the priority property.
+	 * Start cron if not already started, then set it's priority from the value of the priority
+	 * property.
 	 *
 	 * @return true if completed without error
 	 */
@@ -190,8 +196,8 @@ public class ScriptCron extends Functions {
 	/**
 	 * Stop cron, which prevents all scheduled tasks from running. The tasks are not
 	 * deleted, only paused. If a task is defined to run while cron is stopped,
-	 * that task will be skipped; it will NOT run when the cron is started (not until it's testSchedule
-	 * schedule, that is).
+	 * that task will be skipped; it will NOT run when cron is started (not until it's next
+	 * scheduled run time, that is).
 	 *
 	 * @return true if completed without error
 	 */
@@ -251,8 +257,8 @@ public class ScriptCron extends Functions {
 	 * @return true if completed without error
 	 */
 	public static Boolean deleteAll() {
-		// deletedTasks and try/finally block is used to ensure each task that is descheduled is
-		// deleted from the tasks list, even if an error occurs while descheduling tasks
+		// deletedTasks and try/finally block is used to ensure each task that is de-scheduled is
+		// deleted from the tasks list, even if an error occurs while de-scheduling tasks
 		def deletedTasks = []
 		try {
 			tasks.each {k, v ->
@@ -270,11 +276,12 @@ public class ScriptCron extends Functions {
 	 * Determine the trigger times for a schedule pattern.
 	 *
 	 * @param schedule (UNIX crontab-like pattern)
+	 *      <a href="http://www.sauronsoftware.it/projects/cron4j/manual.php#p02">cron4j manual</a>
 	 * @param qty of values to return
 	 * @return list of TimeStamps
 	 */
 	// TODO add options to specify a starting date
-	// TODO remove seconds from the date formate: a schedule will never be
+	// TODO remove seconds from the date format: a schedule will never be
 	// executed at any second other than :00
 	public static String testSchedule(schedule, qty) {
 		validateSchedule(schedule)

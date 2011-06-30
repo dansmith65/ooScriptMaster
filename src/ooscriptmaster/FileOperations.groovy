@@ -349,10 +349,15 @@ public class FileOperations extends Functions {
 	 * @param fmpro object from ScriptMaster
 	 * @param src field, file or directory to zip
 	 * @param dest path to zip file
-	 * @param options to configure how this method will operate
-	 *          overwrite:  (false)  overwrite outputFile
-	 *          level:      (6)      compression level
-	 *          buffer:     (1024)   buffer size to use when reading/writing to file
+	 * @param options configure how this method will operate
+	 * <ul>
+	 *      <li><code>overwrite</code> = boolean. Whether or not to overwrite output file.
+	 *          (default = false)
+	 *      <li><code>level</code> = number from 0-9. Compression level for zip file.
+	 *          (0 = no compression, 9 = highest compression) (default = 6)
+	 *      <li><code>buffer</code> = integer. Buffer size to use when reading/writing to file
+	 *          (default = 1024)
+	 * </ul>
 	 * @return true on success, otherwise throw Exception
 	 */
 	public static Boolean zip(fmpro, src, dest, options) {
@@ -411,7 +416,7 @@ public class FileOperations extends Functions {
 					destFile.delete()
 				} else {
 					//TODO: call another method that copies data from zip file to a temp stream,
-					// deletes the zip file, then re-creates it be carefull not to allow this
+					// deletes the zip file, then re-creates it be careful not to allow this
 					// file to be deleted in the finally block setting isZipEntryCreated to true
 					// in this section should work again, for safety,
 					// might want to write everything to a temp file,
