@@ -50,6 +50,7 @@ public class ErrorCodes {
 			1000: "SQL Error",
 			1000.01: "SQL Error: must call SQLArray before any other SQLArray... functions",
 			1000.02: "SQL Error: value not in array",
+			1001: "Perform script error",
 	]
 
 	/**
