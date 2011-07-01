@@ -23,8 +23,8 @@ public class Timer extends Functions {
 	}
 
 	/**
-	 * Measure the time in seconds since split was last called (or since start was called,
-	 * if split has not been called yet).
+	 * Measure the time in seconds since split was last called
+	 * (or since start was called, if split has not been called yet).
 	 *
 	 * @return elapsed time in fractions of a second
 	 */

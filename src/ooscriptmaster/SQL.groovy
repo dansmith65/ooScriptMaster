@@ -158,7 +158,7 @@ public class SQL extends Functions {
 	 * Format field name to work in an SQL statement.
 	 * Designed to accept input from GetFieldName() from FileMaker.
 	 *
-	 * @param field name, with or without the tablename:: preceding it
+	 * @param field name, with or without the tableName:: preceding it
 	 * @return field name escaped for use in SQL statement
 	 */
 	public static def sqlField(field) {

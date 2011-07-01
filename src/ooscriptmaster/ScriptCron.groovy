@@ -162,7 +162,7 @@ public class ScriptCron extends Functions {
 		return success(options.name)
 	}
 
-	//TODO add edit method
+	// TODO add edit method
 
 	/**
 	 * Set the priority property and the cron priority if cron is started.
@@ -301,7 +301,7 @@ public class ScriptCron extends Functions {
 	 * @param qty of values to return
 	 * @return list of TimeStamps
 	 */
-	// TODO add option to speicy starting date
+	// TODO add option to specify starting date
 	public static String next(qty) {
 		def ret = []
 		tasks.each {k, v ->

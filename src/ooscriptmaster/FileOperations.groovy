@@ -25,7 +25,7 @@ public class FileOperations extends Functions {
 			newFile = new File(path).getCanonicalFile()
 			//getCanonicalPath validates the basic format of the path
 		} catch (e) {
-			// attempt to parse path as a URI (file:/C:/Dirrectory....)
+			// attempt to parse path as a URI (file:/C:/Directory....)
 			try {
 				URI u = new URI(uriEncode(path))
 				newFile = new File(u).getCanonicalFile()
@@ -181,10 +181,10 @@ public class FileOperations extends Functions {
 	 * @param path of directory
 	 * @return true on success, otherwise throw Exception
 	 */
-	//TODO: add options parameter to allow for customization of return value
+	// TODO: add options parameter to allow for customization of return value
 	//options to add:
 	//      recursive   list all contents of all subdirectories
-	//                  might need to be carefull with this one; if a user provided the root dir,
+	//                  might need to be careful with this one; if a user provided the root dir,
 	//                  it could tie-up the plug-in for a long time while processing. add a
 	//                  time-out?
 	//      full paths  should be able to be combined with recursive
@@ -296,7 +296,8 @@ public class FileOperations extends Functions {
 	}
 
 	/**
-	 * Return the path of the directory in the parameter. (removes the file name portion of the path)
+	 * Return the path of the directory in the parameter.
+     * (Removes the file name portion of the path)
 	 *
 	 * @param path to get directory from
 	 * @return path to directory, otherwise throw Exception
@@ -415,7 +416,7 @@ public class FileOperations extends Functions {
 				if (options.overwrite) {
 					destFile.delete()
 				} else {
-					//TODO: call another method that copies data from zip file to a temp stream,
+					// TODO: call another method that copies data from zip file to a temp stream,
 					// deletes the zip file, then re-creates it be careful not to allow this
 					// file to be deleted in the finally block setting isZipEntryCreated to true
 					// in this section should work again, for safety,
@@ -636,7 +637,7 @@ public class FileOperations extends Functions {
 	 * @param options (currently not used)
 	 * @return
 	 */
-	//TODO: create option to overwrite output file
+	// TODO: create option to overwrite output file
 
 	public static Boolean exportContainer(fmpro, containerField, path, options) {
 		// this will validate the parameter and the container field
