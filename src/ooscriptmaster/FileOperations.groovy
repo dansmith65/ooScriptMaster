@@ -1,5 +1,6 @@
 package ooscriptmaster
 
+import java.util.regex.Pattern
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -179,21 +180,69 @@ public class FileOperations extends Functions {
 	 * List contents of a directory
 	 *
 	 * @param path of directory
+	 * @param options configure how this method will operate
+	 * <ul>
+	 *      <li><code>fullpath</code> = boolean. Whether or not to return full paths.
+	 *          (default = false)
+	 *      <li><code>type</code> = all, file, or directory. Limit the list to a specific type.
+	 *          (default = all)
+	 *      <li><code>regex</code> = regular expression. If specified, only file/directory
+	 *          names that match this expression will be returned. (default = empty)
+	 * </ul>
 	 * @return true on success, otherwise throw Exception
 	 */
-	// TODO: add options parameter to allow for customization of return value
-	//options to add:
-	//      recursive   list all contents of all subdirectories
-	//                  might need to be careful with this one; if a user provided the root dir,
-	//                  it could tie-up the plug-in for a long time while processing. add a
-	//                  time-out?
-	//      full paths  should be able to be combined with recursive
+	public static String[] directoryList(path, options) {
+		Map validOptions = [
+				'fullpath': false,
+				'type': 'all',
+				'regex': '',
+		]
+		options = parseOptions(options, validOptions)
 
-	public static String[] directoryList(path) {
+		paramRequired(path)
 		File dir = returnFile(path)
 		if (!dir.exists()) throw new ValidationException(101)
 		if (!dir.isDirectory()) throw new ValidationException(2.05)
-		String[] retVal = dir.list()
+
+		// validate option.type value
+		if (!(options.type in ['all', 'file', 'directory'])) {
+			throw new ValidationException(2.06, ': invalid value for type: ' + options.type)
+		}
+
+		String[] retVal
+		if (options.type == 'all' && !options.regex) {
+			// dont use filter if none of the options require it
+			if (options.fullpath) {
+				retVal = dir.listFiles()
+			} else {
+				retVal = dir.list()
+			}
+		} else {
+			// compile regex pattern
+			Pattern pattern = Pattern.compile(options.regex)
+			// create filter
+			FilenameFilter filter = new FilenameFilter() {
+				public boolean accept(File directory, String basename) {
+					if (options.type == 'file') {
+						if (!new File(directory, basename).isFile()) return false
+					}
+					else if (options.type == 'directory') {
+						if (!new File(directory, basename).isDirectory()) return false
+					}
+					if (options.regex) {
+						return basename.matches(pattern)
+					}
+					return true
+				}
+			}
+			// apply filter to directory
+			if (options.fullpath) {
+				retVal = dir.listFiles(filter)
+			} else {
+				retVal = dir.list(filter)
+			}
+		}
+
 		return success(retVal) as String[]
 	}
 
@@ -297,7 +346,7 @@ public class FileOperations extends Functions {
 
 	/**
 	 * Return the path of the directory in the parameter.
-     * (Removes the file name portion of the path)
+	 * (Removes the file name portion of the path)
 	 *
 	 * @param path to get directory from
 	 * @return path to directory, otherwise throw Exception
