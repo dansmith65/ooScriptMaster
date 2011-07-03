@@ -683,12 +683,19 @@ public class FileOperations extends Functions {
 	 * @param fmpro object from ScriptMaster
 	 * @param containerField name of field in FileMaker
 	 * @param path to save containerField to
-	 * @param options (currently not used)
-	 * @return
+	 * @param options configure how this method will operate
+	 * <ul>
+	 *      <li><code>overwrite</code> = boolean. Whether or not to replace existing file with
+	 *          exported file, if a file with the same name already exists. (default = false)
+	 * </ul>
+	 * @return true on success, otherwise throw Exception
 	 */
-	// TODO: create option to overwrite output file
-
 	public static Boolean exportContainer(fmpro, containerField, path, options) {
+		Map validOptions = [
+				'overwrite': false,
+		]
+		options = parseOptions(options, validOptions)
+
 		// this will validate the parameter and the container field
 		InputStream container = returnContainerStream(fmpro, containerField)
 
@@ -708,7 +715,7 @@ public class FileOperations extends Functions {
 				// and filename should be taken from container file name
 			} else {
 				// add trailing slash to path, if it does not exist
-				if (!path.replace('\\', '/').endsWith('/')) path += '/'
+				if (!path.endsWith('/')) path += '/'
 				path += containerFileName
 			}
 		}
@@ -720,10 +727,13 @@ public class FileOperations extends Functions {
 		if (!output.getParentFile().exists()) directoryCreate(output.getParent())
 
 		// test if output file exists
-		if (output.exists() == true) {
-			throw new ValidationException(102)
-			// ONLY DELETE FILE IF OPTION OVERWRITE IS TRUE
-			//output.delete()
+		if (output.exists()) {
+			// only delete file if overwrite option is true
+			if (options.overwrite) {
+				output.delete()
+			} else {
+				throw new ValidationException(102)
+			}
 		}
 
 		// create file
