@@ -16,7 +16,7 @@ public class ErrorCodes {
 			(-1): "Unknown error",
 			0: "No error",
 
-			// 1-999 are reserved for ooscriptmaster errors
+			// 1-999 reserved for ooScriptMaster errors
 			// 1-99 general/broad-use
 			1: "Canceled by user",
 			2: "Invalid parameter",
@@ -50,10 +50,12 @@ public class ErrorCodes {
 			1000: "SQL Error",
 			1000.01: "SQL Error: must call SQLArray before any other SQLArray... functions",
 			1000.02: "SQL Error: value not in array",
+			1001: "Perform script error",
 	]
 
 	/**
-	 * Retrieve the text description of an error code.  Throw an exception if it does not exist.
+	 * Retrieve the text description of an error code.
+     * Throw an exception if it does not exist.
 	 *
 	 * @param num error code
 	 * @return text description of error code
@@ -140,7 +142,7 @@ public class ErrorCodes {
 	}
 
 	/**
-	 * Convert a map to CSV formated string.
+	 * Convert a map to CSV formatted string.
 	 * (this is mostly a helper function for the two 'getAll' methods in this class)
 	 *
 	 * @param map
@@ -167,7 +169,7 @@ public class ErrorCodes {
 	}
 
 	/**
-	 * Save all error codes defined in this class, in a CSV formated file.
+	 * Save all error codes defined in this class, in a CSV formatted file.
 	 *
 	 * @param filePath for output CSV file
 	 */

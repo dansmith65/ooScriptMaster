@@ -1,13 +1,20 @@
 package ooscriptmaster
 
+import java.util.regex.Pattern
+
 /**
  * Base class for all classes which provide ScriptMaster functions
  */
 public class Functions {
 	/**
+	 * Current package version (i.e. version of the ooScriptMaster.jar file)
+	 * This version number will match the git tag in the master branch.
+	 */
+	public static final String VERSION = '1.0100'
+
+	/**
 	 * End of line marker for current operating system.
 	 */
-
 	public static final String EOL = System.getProperty("line.separator")
 
 	/**
@@ -130,8 +137,24 @@ public class Functions {
 		if (validOptions == null || validOptions == '') return returnVal
 
 		// convert return-delimeted string to map
+		Pattern patternKey = Pattern.compile("^[^=]+")
+		Pattern patternValue = Pattern.compile("(?<==).*")
 		Map options = [:]
-		opt.splitEachLine('=') { k, v -> options[k] = v }
+		opt.eachLine() { line ->
+			// skip blank lines
+			if (line) {
+				def key = line.find(patternKey)
+				def value = line.find(patternValue)
+				if (!key || !key.trim()) {
+					throw new ValidationException(2.06, ' :name was empty')
+				}
+				// if value is not null
+				if (value != null) {
+					value = value.trim()
+				}
+				options[key.trim().toLowerCase()] = value
+			}
+		}
 
 		// iterate over each option
 		// verify it is a valid option
