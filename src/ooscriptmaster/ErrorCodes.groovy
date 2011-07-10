@@ -38,6 +38,9 @@ public class ErrorCodes {
 			120: "File is OPEN",
 			// 200 specific to particular function
 			200: "TimerStart must be called first",
+			201: "Cannot parse JSON text",
+			202: "JSONParse must be called first",
+			203: "value does not exist in JSON",
 			// 300 FileMaker calculation engine related
 			300: "Container field is empty",
 			300.01: "Could not get data from container (make sure container field name is passed as text)",
@@ -55,7 +58,7 @@ public class ErrorCodes {
 
 	/**
 	 * Retrieve the text description of an error code.
-     * Throw an exception if it does not exist.
+	 * Throw an exception if it does not exist.
 	 *
 	 * @param num error code
 	 * @return text description of error code
