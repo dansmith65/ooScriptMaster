@@ -12,5 +12,8 @@ ooScriptMaster uses classes with static fields and methods. Every function decla
 
 h1. STATUS
 
-This project is currently in pre-release state. When a beta release is available, I will post a download which will include ScriptMaster.fp7 containing ooScriptMaster.jar and with all the functions/parameters defined.
-If you would like to get started with the project now, you will need to compile the code as a .jar file and refer to the documentation in the code to see what methods are available.
+All functions have been tested on Windows and most functions have been tested on Mac. There are no known issues.
+
+In the "Downloads":https://github.com/dansmith65/ooScriptMaster/downloads section you can download a copy of a ScriptMaster.fp7 file containing ooScriptMaster.jar and all the functions/parameters of this project defined.
+
+Groovydoc for ooScriptMaster.jar are avilable "here":http://dansmith65.github.com/ooScriptMaster/groovydoc/.

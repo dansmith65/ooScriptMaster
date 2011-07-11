@@ -1,5 +1,6 @@
 package ooscriptmaster
 
+import java.util.regex.Pattern
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -25,7 +26,7 @@ public class FileOperations extends Functions {
 			newFile = new File(path).getCanonicalFile()
 			//getCanonicalPath validates the basic format of the path
 		} catch (e) {
-			// attempt to parse path as a URI (file:/C:/Dirrectory....)
+			// attempt to parse path as a URI (file:/C:/Directory....)
 			try {
 				URI u = new URI(uriEncode(path))
 				newFile = new File(u).getCanonicalFile()
@@ -179,21 +180,69 @@ public class FileOperations extends Functions {
 	 * List contents of a directory
 	 *
 	 * @param path of directory
+	 * @param options configure how this method will operate
+	 * <ul>
+	 *      <li><code>fullpath</code> = boolean. Whether or not to return full paths.
+	 *          (default = false)
+	 *      <li><code>type</code> = all, file, or directory. Limit the list to a specific type.
+	 *          (default = all)
+	 *      <li><code>regex</code> = regular expression. If specified, only file/directory
+	 *          names that match this expression will be returned. (default = empty)
+	 * </ul>
 	 * @return true on success, otherwise throw Exception
 	 */
-	//TODO: add options parameter to allow for customization of return value
-	//options to add:
-	//      recursive   list all contents of all subdirectories
-	//                  might need to be carefull with this one; if a user provided the root dir,
-	//                  it could tie-up the plug-in for a long time while processing. add a
-	//                  time-out?
-	//      full paths  should be able to be combined with recursive
+	public static String[] directoryList(path, options) {
+		Map validOptions = [
+				'fullpath': false,
+				'type': 'all',
+				'regex': '',
+		]
+		options = parseOptions(options, validOptions)
 
-	public static String[] directoryList(path) {
+		paramRequired(path)
 		File dir = returnFile(path)
 		if (!dir.exists()) throw new ValidationException(101)
 		if (!dir.isDirectory()) throw new ValidationException(2.05)
-		String[] retVal = dir.list()
+
+		// validate option.type value
+		if (!(options.type in ['all', 'file', 'directory'])) {
+			throw new ValidationException(2.06, ': invalid value for type: ' + options.type)
+		}
+
+		String[] retVal
+		if (options.type == 'all' && !options.regex) {
+			// dont use filter if none of the options require it
+			if (options.fullpath) {
+				retVal = dir.listFiles()
+			} else {
+				retVal = dir.list()
+			}
+		} else {
+			// compile regex pattern
+			Pattern pattern = Pattern.compile(options.regex)
+			// create filter
+			FilenameFilter filter = new FilenameFilter() {
+				public boolean accept(File directory, String basename) {
+					if (options.type == 'file') {
+						if (!new File(directory, basename).isFile()) return false
+					}
+					else if (options.type == 'directory') {
+						if (!new File(directory, basename).isDirectory()) return false
+					}
+					if (options.regex) {
+						return basename.matches(pattern)
+					}
+					return true
+				}
+			}
+			// apply filter to directory
+			if (options.fullpath) {
+				retVal = dir.listFiles(filter)
+			} else {
+				retVal = dir.list(filter)
+			}
+		}
+
 		return success(retVal) as String[]
 	}
 
@@ -298,7 +347,8 @@ public class FileOperations extends Functions {
 	}
 
 	/**
-	 * Return the path of the directory in the parameter. (removes the file name portion of the path)
+	 * Return the path of the directory in the parameter.
+	 * (Removes the file name portion of the path)
 	 *
 	 * @param path to get directory from
 	 * @return path to directory, otherwise throw Exception
@@ -351,10 +401,15 @@ public class FileOperations extends Functions {
 	 * @param fmpro object from ScriptMaster
 	 * @param src field, file or directory to zip
 	 * @param dest path to zip file
-	 * @param options to configure how this method will operate
-	 *          overwrite:  (false)  overwrite outputFile
-	 *          level:      (6)      compression level
-	 *          buffer:     (1024)   buffer size to use when reading/writing to file
+	 * @param options configure how this method will operate
+	 * <ul>
+	 *      <li><code>overwrite</code> = boolean. Whether or not to overwrite output file.
+	 *          (default = false)
+	 *      <li><code>level</code> = number from 0-9. Compression level for zip file.
+	 *          (0 = no compression, 9 = highest compression) (default = 6)
+	 *      <li><code>buffer</code> = integer. Buffer size to use when reading/writing to file
+	 *          (default = 1024)
+	 * </ul>
 	 * @return true on success, otherwise throw Exception
 	 */
 	public static Boolean zip(fmpro, src, dest, options) {
@@ -412,8 +467,8 @@ public class FileOperations extends Functions {
 				if (options.overwrite) {
 					destFile.delete()
 				} else {
-					//TODO: call another method that copies data from zip file to a temp stream,
-					// deletes the zip file, then re-creates it be carefull not to allow this
+					// TODO: call another method that copies data from zip file to a temp stream,
+					// deletes the zip file, then re-creates it be careful not to allow this
 					// file to be deleted in the finally block setting isZipEntryCreated to true
 					// in this section should work again, for safety,
 					// might want to write everything to a temp file,
@@ -630,12 +685,19 @@ public class FileOperations extends Functions {
 	 * @param fmpro object from ScriptMaster
 	 * @param containerField name of field in FileMaker
 	 * @param path to save containerField to
-	 * @param options (currently not used)
-	 * @return
+	 * @param options configure how this method will operate
+	 * <ul>
+	 *      <li><code>overwrite</code> = boolean. Whether or not to replace existing file with
+	 *          exported file, if a file with the same name already exists. (default = false)
+	 * </ul>
+	 * @return true on success, otherwise throw Exception
 	 */
-	//TODO: create option to overwrite output file
-
 	public static Boolean exportContainer(fmpro, containerField, path, options) {
+		Map validOptions = [
+				'overwrite': false,
+		]
+		options = parseOptions(options, validOptions)
+
 		// this will validate the parameter and the container field
 		InputStream container = returnContainerStream(fmpro, containerField)
 
@@ -655,7 +717,7 @@ public class FileOperations extends Functions {
 				// and filename should be taken from container file name
 			} else {
 				// add trailing slash to path, if it does not exist
-				if (!path.replace('\\', '/').endsWith('/')) path += '/'
+				if (!path.endsWith('/')) path += '/'
 				path += containerFileName
 			}
 		}
@@ -667,10 +729,13 @@ public class FileOperations extends Functions {
 		if (!output.getParentFile().exists()) directoryCreate(output.getParent())
 
 		// test if output file exists
-		if (output.exists() == true) {
-			throw new ValidationException(102)
-			// ONLY DELETE FILE IF OPTION OVERWRITE IS TRUE
-			//output.delete()
+		if (output.exists()) {
+			// only delete file if overwrite option is true
+			if (options.overwrite) {
+				output.delete()
+			} else {
+				throw new ValidationException(102)
+			}
 		}
 
 		// create file

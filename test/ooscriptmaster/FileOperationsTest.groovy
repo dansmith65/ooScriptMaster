@@ -41,9 +41,7 @@ public class FileOperationsTest {
 		} else if (Functions.ISMAC) {
 			//TODO: enter a list of valid paths for a Mac
 			validPaths = [
-                    '/Users/RWU/Documents/',
-                    '/Users/iCafeM7/Documents/',
-                    '/Volumes/MacBookPro/Users/RWU/Documents/SpringFM/Demo.txt'
+					'???',
 			]
 		} else {
 			fail("not on Mac or Windows?  what OS???")

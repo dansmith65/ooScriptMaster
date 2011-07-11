@@ -1,17 +1,15 @@
 package ooscriptmaster
 
+import java.util.regex.Pattern
+
 /**
  * Base class for all classes which provide ScriptMaster functions
  */
 public class Functions {
 	/**
-	 * Version info
-	 */
-	public static final String VER = '1.06.06'
-
-    /**
 	 * End of line marker for current operating system.
 	 */
+
 	public static final String EOL = System.getProperty("line.separator")
 
 	/**
@@ -30,6 +28,16 @@ public class Functions {
 	public static final String USER = System.getProperty("user.name")
 
 	/**
+	 * User home directory
+	 */
+	public static final String HOME = System.getProperty("user.home")
+
+	/**
+	 * User name
+	 */
+	public static final String USER = System.getProperty("user.name")
+
+	/**
 	 * True if the current operating system is Macintosh
 	 */
 	public static final Boolean ISMAC =
@@ -40,13 +48,6 @@ public class Functions {
 	 */
 	public static final Boolean ISWIN =
 	System.getProperty("os.name").toLowerCase().contains("windows")
-
-	/**
-	 * True if the current Java version is 1.6 or above
-	 */
-	public static final Boolean JVER =
-    System.getProperty("java.version").substring(0, 2) == '1.' && System.getProperty("java.version").substring(2, 3).toInteger() > 5
-
 
 	/**
 	 * Used to call a method from ScriptMaster. If a method is called directly,
@@ -133,8 +134,24 @@ public class Functions {
 		if (validOptions == null || validOptions == '') return returnVal
 
 		// convert return-delimeted string to map
+		Pattern patternKey = Pattern.compile("^[^=]+")
+		Pattern patternValue = Pattern.compile("(?<==).*")
 		Map options = [:]
-		opt.splitEachLine('=') { k, v -> options[k] = v }
+		opt.eachLine() { line ->
+			// skip blank lines
+			if (line) {
+				def key = line.find(patternKey)
+				def value = line.find(patternValue)
+				if (!key || !key.trim()) {
+					throw new ValidationException(2.06, ' :name was empty')
+				}
+				// if value is not null
+				if (value != null) {
+					value = value.trim()
+				}
+				options[key.trim().toLowerCase()] = value
+			}
+		}
 
 		// iterate over each option
 		// verify it is a valid option
