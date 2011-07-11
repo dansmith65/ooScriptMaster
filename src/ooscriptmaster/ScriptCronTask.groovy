@@ -6,7 +6,6 @@ import it.sauronsoftware.cron4j.TaskExecutionContext
 /**
  * Task class that is scheduled by cron4j
  */
-// TODO don't allow task to run multiple times in a row if a past task was not run on time
 public class ScriptCronTask extends Task {
 	public Object fmpro
 	public String file
@@ -26,8 +25,6 @@ public class ScriptCronTask extends Task {
 		if (priority != null) {
 			Thread.currentThread().setPriority(priority)
 		}
-//		fmpro.performScript(file, script, parameter)
-		fmpro.performScript(file, script, parameter +
-				' (priority:' + Thread.currentThread().getPriority().toString()) + ')'
+		fmpro.performScript(file, script, parameter)
 	}
 }

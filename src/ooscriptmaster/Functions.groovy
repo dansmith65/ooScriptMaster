@@ -6,50 +6,53 @@ import java.util.regex.Pattern
  * Base class for all classes which provide ScriptMaster functions
  */
 public class Functions {
+    /**
+	 * Current package version (i.e. version of the ooScriptMaster.jar file)
+	 * This version number will match the git tag in the master branch.
+	 */
+	public static final String VERSION = '1.0100'
+
 	/**
 	 * End of line marker for current operating system.
 	 */
 
-	public static final String EOL = System.getProperty("line.separator")
+	public static final String EOL = System.getProperty('line.separator')
 
 	/**
 	 * File separator for current operating system
 	 */
-	public static final String SEP = System.getProperty("file.separator")
+	public static final String SEP = System.getProperty('file.separator')
 
     /**
 	 * User home directory
 	 */
-	public static final String HOME = System.getProperty("user.home")
+	public static final String HOME = System.getProperty('user.home')
 
 	 /**
 	 * User home directory
 	 */
-	public static final String USER = System.getProperty("user.name")
-
-	/**
-	 * User home directory
-	 */
-	public static final String HOME = System.getProperty("user.home")
-
-	/**
-	 * User name
-	 */
-	public static final String USER = System.getProperty("user.name")
+	public static final String USER = System.getProperty('user.name')
 
 	/**
 	 * True if the current operating system is Macintosh
 	 */
 	public static final Boolean ISMAC =
-	System.getProperty("os.name").toLowerCase().contains("mac")
+	System.getProperty('os.name').toLowerCase().contains('mac')
 
 	/**
 	 * True if the current operating system is Windows
 	 */
 	public static final Boolean ISWIN =
-	System.getProperty("os.name").toLowerCase().contains("windows")
+	System.getProperty('os.name').toLowerCase().contains('windows')
 
-	/**
+    /**
+	 * True if the current Java version is above 1.5
+     * Some functions require JVM 1.5
+	 */
+	public static final Boolean JVER =
+	System.getProperty('java.version').substring(0, 2) == '1.' && System.getProperty('java.version').substring(2, 3).toInteger() > 5
+
+/**
 	 * Used to call a method from ScriptMaster. If a method is called directly,
 	 * the lastError info will not be set if an Exception is not caught by the method.
 	 *
@@ -65,7 +68,9 @@ public class Functions {
 		} catch (GeneralException ge) {
 			throw ge
 		} catch (e) {
-			ErrorCodes.setLastError(-1, e)
+			if (ErrorCodes.lastErrorNumber == 0) {
+				ErrorCodes.setLastError(-1, e)
+			}
 			throw (e)
 		}
 	}
@@ -157,12 +162,16 @@ public class Functions {
 		// verify it is a valid option
 		// convert it to same object type as that from validOption - or throw an error trying
 		options.each() { key, value ->
+			key = key.toString().toLowerCase()
 			if (validOptions.containsKey(key)) {
 				// replace default option with user-provided option
 				// attempt to convert type based on class of value in validOptions
 				try {
 					if (validOptions[key] in Boolean) {
 						returnVal[key] = value.toString().toBoolean()
+					} else if (validOptions[key] == null) {
+						// don't perform any conversion of validOption's value is null
+						returnVal[key] = value
 					} else {
 						returnVal[key] = value.asType(validOptions[key].getClass())
 					}
