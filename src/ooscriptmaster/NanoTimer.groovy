@@ -14,7 +14,7 @@ class NanoTimer extends Functions {
 	public static def split = null
 
 	public static def run(String methodName, Object[] args = null) {
-		Fn.run(this, methodName, args)
+		Functions.run(this, methodName, args)
 	}
 
 	/**
