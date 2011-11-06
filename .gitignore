@@ -1,2 +1,6 @@
-out
-ooScriptMaster.iml
+# IntelliJ IDEA project files
+.idea/
+*.iml
+
+# comiled source, jar files, etc.
+out/
