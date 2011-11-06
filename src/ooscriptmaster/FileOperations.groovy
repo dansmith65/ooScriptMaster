@@ -312,8 +312,9 @@ public class FileOperations extends Functions {
 		if (file.isDirectory()) return success(false) as Boolean
 
 		// last character in path is a file separator
-		//if (path.endsWith('\\') || path.endsWith('/')) return success(false) as Boolean
-        if (path.endsWith(SEP)) return success(false) as Boolean
+		if (path.endsWith('\\') || path.endsWith('/') || path.endsWith(SEP)) {
+			return success(false) as Boolean
+		}
 
 		// last segment of path contains a period
 		if (file.getName().contains('.') || path.endsWith('.')) return success()
@@ -337,8 +338,9 @@ public class FileOperations extends Functions {
 		if (file.isDirectory()) return success()
 
 		// last character in path is a file separator
-		//if (path.endsWith('\\') || path.endsWith('/')) return success()
-        if (path.endsWith(SEP)) return success()
+		if (path.endsWith('\\') || path.endsWith('/') || path.endsWith(SEP)) {
+			return success(false) as Boolean
+		}
 
 		// last segment of path does not contain a period
 		if (!file.getName().contains('.') && !path.endsWith('.')) return success()
@@ -709,7 +711,7 @@ public class FileOperations extends Functions {
 		// path does not contain a file extension
 		if (path.find('\\.[^\\./]+$') == null) {
 			// path ends with a period
-			// get file extenstion from container field
+			// get file extension from container field
 			if (path.endsWith('.')) {
 				path += containerFileName.find('[^\\.]+$')
 
