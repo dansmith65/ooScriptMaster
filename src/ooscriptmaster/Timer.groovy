@@ -19,7 +19,7 @@ public class Timer extends Functions {
 	public static def start() {
 		split = null
 		start = System.nanoTime()
-		success(start)
+		success(start / 1000000000)
 	}
 
 	/**
