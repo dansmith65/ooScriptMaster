@@ -18,7 +18,7 @@ public class Timer extends Functions {
 	 */
 	public static def start() {
 		split = null
-		start = System.currentTimeMillis() / 1000
+		start = System.nanoTime()
 		success(start)
 	}
 
@@ -39,9 +39,9 @@ public class Timer extends Functions {
 		} else {
 			lastTime = split
 		}
-		split = System.currentTimeMillis() / 1000
+		split = System.nanoTime()
 		def returnVal = split - lastTime
-		success(returnVal)
+		success(returnVal / 1000000000)
 	}
 
 	/**
@@ -53,10 +53,10 @@ public class Timer extends Functions {
 		if (start == null) {
 			throw new ValidationException(200)
 		}
-		def returnVal = System.currentTimeMillis() / 1000 - start
+		def returnVal = System.nanoTime() - start
 		start = null
 		split = null
-		success(returnVal)
+		success(returnVal / 1000000000)
 	}
 
 }
